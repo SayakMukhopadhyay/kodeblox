@@ -2,6 +2,7 @@
   <settings>
     <module2copyright>
       <element module="Typescript" copyright="Apache-2.0" />
+      <element module="Test" copyright="Apache-2.0" />
     </module2copyright>
   </settings>
 </component>

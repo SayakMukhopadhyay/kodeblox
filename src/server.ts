@@ -23,31 +23,34 @@ import { AddressInfo } from 'net';
 import { log } from './logging';
 
 export class AppServer {
+  get server(): Server {
+    return this._server;
+  }
   public express: Application;
   public port: number;
-  private server: Server;
+  private readonly _server: Server;
 
-  constructor(options: any) {
+  constructor(options?: any) {
     this.express = express();
-    this.port = options.port || 8080;
+    this.port = options?.port || 8080;
 
-    if (options.preMiddlewareHook) {
+    if (options?.preMiddlewareHook) {
       options.preMiddlewareHook();
     }
     this.middleware(options);
-    if (options.postMiddlewareHook) {
+    if (options?.postMiddlewareHook) {
       options.postMiddlewareHook();
     }
 
     this.express.set('port', this.port);
-    this.server = http.createServer(this.express);
-    this.server.listen(this.port);
-    this.server.on('error', this.onError);
-    this.server.on('listening', this.onListening);
+    this._server = http.createServer(this.express);
+    this._server.listen(this.port);
+    this._server.on('error', this.onError.bind(this));
+    this._server.on('listening', this.onListening.bind(this));
   }
 
   private middleware(options: any): void {
-    if (!options.disableRouteLogs) {
+    if (!options?.disableRouteLogs) {
       this.express.use(morgan('dev'));
     }
   }
@@ -65,7 +68,7 @@ export class AppServer {
   }
 
   private onListening(): void {
-    let address = this.server.address() as AddressInfo;
+    let address = this._server.address() as AddressInfo;
     if (address) {
       log(`Listening on port ${address.port}`);
     }
