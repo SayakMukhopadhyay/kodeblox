@@ -1,0 +1,10 @@
+[
+  {
+    "path": "dist/kodeblox.cjs.production.min.js",
+    "limit": "10 KB"
+  },
+  {
+    "path": "dist/kodeblox.esm.js",
+    "limit": "10 KB"
+  }
+]
