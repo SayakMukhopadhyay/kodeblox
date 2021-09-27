@@ -21,6 +21,7 @@ import http from 'http';
 import { Server } from 'http';
 import { AddressInfo } from 'net';
 import { log } from './logging';
+import { DiscordClient } from './discord';
 
 export class AppServer {
   get server(): Server {
@@ -28,6 +29,7 @@ export class AppServer {
   }
   public express: Application;
   public port: number;
+  public discordClient: DiscordClient;
   private readonly _server: Server;
 
   constructor(options?: any) {
@@ -41,6 +43,7 @@ export class AppServer {
     if (options?.postMiddlewareHook) {
       options.postMiddlewareHook();
     }
+    this.discordClient = new DiscordClient(options.discord);
 
     this.express.set('port', this.port);
     this._server = http.createServer(this.express);

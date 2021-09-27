@@ -16,6 +16,7 @@
     "test": "tsdx test",
     "test:coverage": "tsdx test --coverage",
     "lint": "tsdx lint",
+    "lint:fix": "tsdx lint --fix",
     "prepare": "tsdx build && husky install",
     "size": "size-limit",
     "analyze": "size-limit --why"

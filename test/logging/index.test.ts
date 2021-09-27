@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-export function log(data: string | Error | any, metadata?: any) {
-  console.log(data);
-  console.log(JSON.stringify(metadata));
-}
+import { log } from '../../src/logging';
+
+describe('server', () => {
+  it('works', async () => {
+    log('test');
+  });
+});
