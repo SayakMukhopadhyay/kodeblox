@@ -20,26 +20,26 @@ export class Responses {
     "Um...sorry couldn't do that",
     'Computer says no',
     'Oops! problem... :frowning:',
-    'Eeek! problems :frowning:',
+    'Eeek! problems :frowning:'
   ];
   public static readonly NO_PARAMS = [
     'Um...I think you are forgetting something',
     'I need more details to work on',
-    'Yeah...go on!',
+    'Yeah...go on!'
   ];
   public static readonly TOO_MANY_PARAMS = [
     'Aaah...thats too many details!',
-    'No need to hurry. Give me the details one by one',
+    'No need to hurry. Give me the details one by one'
   ];
   public static readonly NOT_A_COMMAND = [
-    'Um...were you trying to give me a command? If so you may be using the wrong one',
+    'Um...were you trying to give me a command? If so you may be using the wrong one'
   ];
   public static readonly INSUFFICIENT_PERMS = ["You don't have the permissions to make me do that"];
   public static readonly NOT_A_TEXT_CHANNEL = [
-    'The entered channel is not a text channel. Please enter a text channel',
+    'The entered channel is not a text channel. Please enter a text channel'
   ];
   public static readonly EMBED_PERMISSION = [
-    "I don't have permissions to send a message and/or create an embed and/or attach files in the entered channel. Please assign the permissions to me.",
+    "I don't have permissions to send a message and/or create an embed and/or attach files in the entered channel. Please assign the permissions to me."
   ];
 
   public static getResponse(action: string[]): string {

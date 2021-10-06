@@ -51,7 +51,7 @@ export class DiscordClient {
       if (message.channel.type === 'DM' && !message.author.bot) {
         this.processDm(message);
       } else if (
-        message.mentions.users.filter(user => {
+        message.mentions.users.filter((user) => {
           return user.id === this.client.user?.id;
         }).size > 0
       ) {
@@ -65,43 +65,43 @@ export class DiscordClient {
     });
 
     this.client.on('messageReactionAdd', (messageReaction, user) => {
-      let helpObject = this.commandsMap.get('help') as Help;
-      let message = messageReaction.message;
+      const helpObject = this.commandsMap.get('help') as Help;
+      const message = messageReaction.message;
       if (!user.bot && message.embeds && message.embeds.length > 0 && message.embeds[0].title === helpObject.title) {
         helpObject.emojiCaught(messageReaction as MessageReaction);
       }
     });
 
-    this.client.on('raw', async packet => {
+    this.client.on('raw', async (packet) => {
       if (['MESSAGE_REACTION_ADD'].includes(packet.t)) {
-        let channel: DMChannel = (await this.client.channels.fetch(packet.d.channel_id)) as DMChannel;
+        const channel: DMChannel = (await this.client.channels.fetch(packet.d.channel_id)) as DMChannel;
         if (!channel.messages.cache.has(packet.d.message_id)) {
-          let message = await channel.messages.fetch(packet.d.message_id);
-          let emoji: string = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
-          let reaction = message.reactions.cache.get(emoji);
-          let user = await this.client.users.fetch(packet.d.user_id);
+          const message = await channel.messages.fetch(packet.d.message_id);
+          const emoji: string = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
+          const reaction = message.reactions.cache.get(emoji);
+          const user = await this.client.users.fetch(packet.d.user_id);
           this.client.emit('messageReactionAdd', reaction as MessageReaction, user);
         }
       }
     });
 
-    this.client.on('rateLimit', rateLimitInfo => {
+    this.client.on('rateLimit', (rateLimitInfo) => {
       log(new Error('Discord Rate Limit Hit'), {
-        metaData: rateLimitInfo,
+        metaData: rateLimitInfo
       });
     });
   }
 
   private initiateCommands(): void {
     const commands = CommandRegister.implementations;
-    commands.forEach(command => {
+    commands.forEach((command) => {
       const commandInstance = new command();
-      commandInstance.calls.forEach(call => {
+      commandInstance.calls.forEach((call) => {
         this.commandsMap.set(call, commandInstance);
       });
       if (commandInstance.receiveDm) {
         const dmCommandInstance = new command();
-        dmCommandInstance.dmCalls.forEach(call => {
+        dmCommandInstance.dmCalls.forEach((call) => {
           this.commandsMap.set(call, dmCommandInstance);
         });
       }
@@ -109,13 +109,13 @@ export class DiscordClient {
   }
 
   private createHelp(): void {
-    this.commandsMap.forEach(value => {
-      let helpArray: [string, string, string, string[]] = value.help();
-      let helpObject: HelpSchema = {
+    this.commandsMap.forEach((value) => {
+      const helpArray: [string, string, string, string[]] = value.help();
+      const helpObject: HelpSchema = {
         command: helpArray[0],
         helpMessage: helpArray[1],
         template: helpArray[2],
-        example: helpArray[3],
+        example: helpArray[3]
       };
       (this.commandsMap.get('help') as Help).addHelp(helpObject);
     });
@@ -123,10 +123,10 @@ export class DiscordClient {
 
   private getCommandArguments(message: Message) {
     if (this.client.user) {
-      let messageString = message.content.replace(new RegExp(`<@!?${this.client.user.id}>`), '').trim();
-      let messageArray = messageString.split(' ');
-      let command = messageArray[0].toLowerCase();
-      let commandArguments: string = '';
+      const messageString = message.content.replace(new RegExp(`<@!?${this.client.user.id}>`), '').trim();
+      const messageArray = messageString.split(' ');
+      const command = messageArray[0].toLowerCase();
+      let commandArguments = '';
       if (messageArray.length > 1) {
         commandArguments = messageArray.slice(1, messageArray.length).join(' ');
       }
@@ -136,7 +136,7 @@ export class DiscordClient {
   }
 
   private processNormal(message: Message): void {
-    let commandArguments = this.getCommandArguments(message);
+    const commandArguments = this.getCommandArguments(message);
     if (commandArguments && this.commandsMap.has(commandArguments.command)) {
       console.log(commandArguments.command + ' command requested');
       this.commandsMap.get(commandArguments.command)?.exec(message, commandArguments.commandArguments);
@@ -146,7 +146,7 @@ export class DiscordClient {
   }
 
   private processDm(message: Message): void {
-    let commandArguments = this.getCommandArguments(message);
+    const commandArguments = this.getCommandArguments(message);
     if (
       commandArguments &&
       this.commandsMap.has(commandArguments.command) &&

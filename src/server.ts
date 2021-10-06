@@ -71,7 +71,7 @@ export class AppServer {
   }
 
   private onListening(): void {
-    let address = this._server.address() as AddressInfo;
+    const address = this._server.address() as AddressInfo;
     if (address) {
       log(`Listening on port ${address.port}`);
     }

@@ -59,7 +59,7 @@ export class Help implements Command {
   }
 
   addHelp(helpObject: HelpSchema): void {
-    let indexOfHelp = this.helpArray.findIndex(help => {
+    const indexOfHelp = this.helpArray.findIndex((help) => {
       return help.command === helpObject.command;
     });
     if (indexOfHelp === -1) {
@@ -70,9 +70,9 @@ export class Help implements Command {
   }
 
   emojiCaught(msgReaction: MessageReaction): void {
-    let index = this.emojiArray.indexOf(msgReaction.emoji.toString());
-    let messageEmbed = msgReaction.message.embeds[0];
-    let page = messageEmbed.fields.find(field => field.name === 'PAGE');
+    const index = this.emojiArray.indexOf(msgReaction.emoji.toString());
+    const messageEmbed = msgReaction.message.embeds[0];
+    const page = messageEmbed.fields.find((field) => field.name === 'PAGE');
     if (page) {
       if (index !== -1) {
         msgReaction.message.delete();
@@ -91,30 +91,30 @@ export class Help implements Command {
   }
 
   async display(message: Message, page: number, item: number | null) {
-    let embed = new MessageEmbed();
+    const embed = new MessageEmbed();
     embed.setColor(6684774);
     embed.setTitle(this.title);
     embed.setDescription(`Help Associated with BGSBot commands`);
 
     if (!item) {
-      let length = this.helpArray.length;
+      const length = this.helpArray.length;
 
-      let displayArray: HelpSchema[][] = [];
+      const displayArray: HelpSchema[][] = [];
       for (let i = 0; i < length / 10; i++) {
         displayArray.push(this.helpArray.slice(i * 10, (i + 1) * 10));
       }
 
-      let maxDisplayState = displayArray.length;
-      let displayCommands = displayArray[page - 1];
+      const maxDisplayState = displayArray.length;
+      const displayCommands = displayArray[page - 1];
       try {
-        let returnMessage = await this.helpList(displayCommands, embed, message, page);
+        const returnMessage = await this.helpList(displayCommands, embed, message, page);
         this.helpEmoji(displayCommands, page, maxDisplayState, returnMessage as Message);
       } catch (err) {
         log(err);
       }
     } else {
       try {
-        let returnMessage = await this.helpDescription(this.helpArray[(page - 1) * 10 + item], embed, message, page);
+        const returnMessage = await this.helpDescription(this.helpArray[(page - 1) * 10 + item], embed, message, page);
         (returnMessage as Message).react('⬅');
       } catch (err) {
         log(err);
@@ -128,7 +128,7 @@ export class Help implements Command {
     });
     embed.addField('PAGE', page.toString());
 
-    let member = message.member;
+    const member = message.member;
     if (member) {
       return member.send({ embeds: [embed] });
     } else {
@@ -159,7 +159,7 @@ export class Help implements Command {
     embed.addField('Examples', exampleString);
     embed.addField('PAGE', page.toString());
 
-    let member = message.member;
+    const member = message.member;
     if (member) {
       return member.send({ embeds: [embed] });
     } else {

@@ -37,7 +37,7 @@ export class CommandRegister {
   static implementations: Constructor<Command>[] = [];
 }
 
-export function command<T extends Constructor<Command>>(constructor: T) {
+export function command<T extends Constructor<Command>>(constructor: T): T {
   CommandRegister.implementations.push(constructor);
   return constructor;
 }
