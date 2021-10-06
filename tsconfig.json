@@ -21,6 +21,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     // language and environment
+    "experimentalDecorators": true,
     "lib": ["ES2020"],
     "target": "ES2020",
     // completeness
