@@ -90,7 +90,7 @@ export class Help implements Command {
     }
   }
 
-  async display(message: Message, page: number, item: number | null) {
+  async display(message: Message, page: number, item: number | null): Promise<void> {
     const embed = new MessageEmbed();
     embed.setColor(6684774);
     embed.setTitle(this.title);
@@ -122,7 +122,7 @@ export class Help implements Command {
     }
   }
 
-  async helpList(displayCommands: HelpSchema[], embed: MessageEmbed, message: Message, page: number) {
+  async helpList(displayCommands: HelpSchema[], embed: MessageEmbed, message: Message, page: number): Promise<Message> {
     displayCommands.forEach((help, index) => {
       embed.addField(`${index + 1}. ${help.command}`, help.helpMessage);
     });
@@ -136,7 +136,12 @@ export class Help implements Command {
     }
   }
 
-  async helpEmoji(displayCommands: HelpSchema[], displayState: number, maxDisplayState: number, message: Message) {
+  async helpEmoji(
+    displayCommands: HelpSchema[],
+    displayState: number,
+    maxDisplayState: number,
+    message: Message
+  ): Promise<void> {
     if (displayState > 1) {
       await message.react('◀');
     }
@@ -148,7 +153,7 @@ export class Help implements Command {
     }
   }
 
-  async helpDescription(command: HelpSchema, embed: MessageEmbed, message: Message, page: number) {
+  async helpDescription(command: HelpSchema, embed: MessageEmbed, message: Message, page: number): Promise<Message> {
     embed.addField('Command:', `@BGSBot ${command.command}`);
     embed.addField('Description', command.helpMessage);
     embed.addField('Template', command.template);

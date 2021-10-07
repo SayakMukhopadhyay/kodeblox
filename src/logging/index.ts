@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export function log(data: string | Error | any, metadata?: any) {
+export function log(data: string | Error | unknown, metadata?: unknown): void {
   console.log(data);
   console.log(JSON.stringify(metadata));
 }

@@ -21,7 +21,7 @@ import http from 'http';
 import { Server } from 'http';
 import { AddressInfo } from 'net';
 import { log } from './logging';
-import { DiscordClient } from './discord';
+import { DiscordClient, DiscordOptions } from './discord';
 
 export class AppServer {
   get server(): Server {
@@ -32,7 +32,7 @@ export class AppServer {
   public discordClient: DiscordClient;
   private readonly _server: Server;
 
-  constructor(options?: any) {
+  constructor(options: Options) {
     this.express = express();
     this.port = options?.port || 8080;
 
@@ -52,7 +52,7 @@ export class AppServer {
     this._server.on('listening', this.onListening.bind(this));
   }
 
-  private middleware(options: any): void {
+  private middleware(options: Options): void {
     if (!options?.disableRouteLogs) {
       this.express.use(morgan('dev'));
     }
@@ -77,3 +77,11 @@ export class AppServer {
     }
   }
 }
+
+export type Options = {
+  port?: number;
+  preMiddlewareHook?: () => void;
+  postMiddlewareHook?: () => void;
+  discord: DiscordOptions;
+  disableRouteLogs?: boolean;
+};

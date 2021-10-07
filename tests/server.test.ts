@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-import { AppServer } from '../src/server';
+import { AppServer } from '../src';
+import { Options } from '../src/server';
 
 describe('server', () => {
+  const onlyDiscordOptions: Options = {
+    discord: {
+      token: 'foo',
+      client: {
+        intents: ['GUILD_MEMBERS']
+      }
+    }
+  };
+
   it('starts with defaults', async () => {
-    const appServer = new AppServer();
+    const appServer = new AppServer(onlyDiscordOptions);
     try {
       const listeningCallbackPromise = new Promise((resolve, reject) => {
         appServer.server.on('listening', resolve);
@@ -31,7 +41,7 @@ describe('server', () => {
   });
 
   it('uses default port', async () => {
-    const appServer = new AppServer();
+    const appServer = new AppServer(onlyDiscordOptions);
     try {
       expect(appServer.port).toEqual(8080);
     } finally {

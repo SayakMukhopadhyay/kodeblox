@@ -20,10 +20,10 @@ import { Command, CommandRegister } from './command';
 import { Responses } from './responseDict';
 import { Help, HelpSchema } from './commands/help';
 
-export interface DiscordOptions {
+export type DiscordOptions = {
   token: string;
   client: ClientOptions;
-}
+};
 
 export class DiscordClient {
   public client: Client;
