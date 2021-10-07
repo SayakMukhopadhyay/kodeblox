@@ -19,6 +19,7 @@
     "outDir": "dist",
     // imterop constraints
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     // language and environment
     "experimentalDecorators": true,
