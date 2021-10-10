@@ -16,5 +16,7 @@
 
 export function log(data: string | Error | unknown, metadata?: unknown): void {
   console.log(data);
-  console.log(JSON.stringify(metadata));
+  if (metadata) {
+    console.log(JSON.stringify(metadata));
+  }
 }
