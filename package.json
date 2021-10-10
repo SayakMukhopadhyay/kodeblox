@@ -17,7 +17,7 @@
   "license": "Apache-2.0",
   "author": "Sayak Mukhopadhyay <mukhopadhyaysayak@gmail.com>",
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "typings": "typings/index.d.ts",
   "files": [
     "dist",
     "typings"
