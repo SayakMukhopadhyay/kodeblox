@@ -16,6 +16,9 @@
     "rootDir": "src",
     "resolveJsonModule": true,
     // emit
+    "declaration": true,
+    "declarationDir": "typings",
+    "declarationMap": true,
     "outDir": "dist",
     // imterop constraints
     "allowSyntheticDefaultImports": true,
