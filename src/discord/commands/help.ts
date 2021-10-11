@@ -16,7 +16,7 @@
 
 import { Message, MessageEmbed, MessageReaction } from 'discord.js';
 import { Responses } from '../responseDict';
-import { command, Command } from '../command';
+import { Command } from '../command';
 import { log } from '../../logging';
 
 export interface HelpSchema {
@@ -26,13 +26,12 @@ export interface HelpSchema {
   example: string[];
 }
 
-@command
 export class Help implements Command {
   helpArray: HelpSchema[] = [];
   emojiArray = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'];
   title = ':grey_question: BGSBot Help';
   respondDm = true;
-  receiveDm = true;
+  sendDm = true;
   sentAsDm: boolean;
   calls = ['help', '?'];
   dmCalls = [];
@@ -48,7 +47,9 @@ export class Help implements Command {
     }
     try {
       if (argsArray.length === 0) {
-        message.channel.send("I have DM'd the help documents to you");
+        if (!this.sentAsDm) {
+          message.channel.send("I have DM'd the help documents to you");
+        }
         this.display(message, 1, null);
       } else {
         message.channel.send(Responses.getResponse(Responses.TOO_MANY_PARAMS));

@@ -16,9 +16,10 @@
 
 import { Client, ClientOptions, DMChannel, Message, MessageReaction } from 'discord.js';
 import { log } from '../logging';
-import { Command, CommandRegister } from './command';
+import { Command, NewCommand } from './command';
 import { Responses } from './responseDict';
 import { Help, HelpSchema } from './commands/help';
+import { Hi } from './commands/hi';
 
 export type DiscordOptions = {
   token: string;
@@ -43,7 +44,7 @@ export class DiscordClient {
   private listen() {
     this.client.on('ready', () => {
       log('I am ready!');
-      this.initiateCommands();
+      this.registerCommands([Help, Hi]);
       this.createHelp();
     });
 
@@ -92,20 +93,21 @@ export class DiscordClient {
     });
   }
 
-  private initiateCommands(): void {
-    const commands = CommandRegister.implementations;
-    commands.forEach((command) => {
-      const commandInstance = new command();
-      commandInstance.calls.forEach((call) => {
-        this.commandsMap.set(call, commandInstance);
-      });
-      if (commandInstance.receiveDm) {
-        const dmCommandInstance = new command();
-        dmCommandInstance.dmCalls.forEach((call) => {
-          this.commandsMap.set(call, dmCommandInstance);
-        });
-      }
+  public registerCommands(commands: NewCommand[]): void {
+    commands.forEach(this.registerCommand.bind(this));
+  }
+
+  public registerCommand(command: NewCommand): void {
+    const commandInstance = new command();
+    commandInstance.calls.forEach((call) => {
+      this.commandsMap.set(call, commandInstance);
     });
+    if (commandInstance.sendDm) {
+      const dmCommandInstance = new command();
+      dmCommandInstance.dmCalls.forEach((call) => {
+        this.commandsMap.set(call, dmCommandInstance);
+      });
+    }
   }
 
   private createHelp(): void {
@@ -150,7 +152,7 @@ export class DiscordClient {
     if (
       commandArguments &&
       this.commandsMap.has(commandArguments.command) &&
-      this.commandsMap.get(commandArguments.command)?.receiveDm
+      this.commandsMap.get(commandArguments.command)?.sendDm
     ) {
       console.log(commandArguments.command + ' command requested');
       this.commandsMap.get(commandArguments.command)?.exec(message, commandArguments.commandArguments);

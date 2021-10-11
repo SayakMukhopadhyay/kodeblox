@@ -17,28 +17,15 @@
 import { Message } from 'discord.js';
 
 export interface Command {
-  respondDm: boolean;
-  receiveDm: boolean;
-  sentAsDm: boolean;
-  calls: string[];
-  dmCalls: string[];
+  respondDm: boolean; // Should the bot respond to commands made in a DM
+  sendDm: boolean; // Should the bot be able to respond with a DM
+  sentAsDm: boolean; // instance level setting when DM and non DM has slightly different behaviour
+  calls: string[]; // array to store the commands
+  dmCalls: string[]; // array to store the commands which would respond with a DM
 
   exec(message: Message, commandArguments: string): void;
   // checkAndMapAlias(command: string): void;
   help(): [string, string, string, string[]];
 }
 
-type Constructor<T> = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  new (...args: any[]): T;
-  readonly prototype: T;
-};
-
-export class CommandRegister {
-  static implementations: Constructor<Command>[] = [];
-}
-
-export function command<T extends Constructor<Command>>(constructor: T): T {
-  CommandRegister.implementations.push(constructor);
-  return constructor;
-}
+export type NewCommand = { new (...args: []): Command };
