@@ -19,3 +19,5 @@ export { DiscordClient, DiscordOptions } from './discord';
 export { Command, NewCommand, Arguments } from './discord/command';
 export { Responses } from './discord/responseDict';
 export { HelpSchema } from './discord/commands/help';
+export { LoggingClient } from './logging';
+export { BugsnagOptions, Bugsnag } from './logging/loggers/bugsnag';
