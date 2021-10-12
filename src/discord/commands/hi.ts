@@ -20,12 +20,13 @@ import { Command } from '../command';
 export class Hi implements Command {
   respondDm = true;
   sendDm = true;
-  sentAsDm: boolean;
+  respondAsDm: boolean;
   calls = ['hi'];
   dmCalls = [];
+  arguments = {};
 
-  constructor(sentAsDm?: boolean) {
-    this.sentAsDm = !!sentAsDm;
+  constructor(respondAsDm?: boolean) {
+    this.respondAsDm = !!respondAsDm;
   }
 
   exec(message: Message, commandArguments: string): void {

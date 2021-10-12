@@ -32,24 +32,19 @@ export class Help implements Command {
   title = ':grey_question: BGSBot Help';
   respondDm = true;
   sendDm = true;
-  sentAsDm: boolean;
+  respondAsDm: boolean;
   calls = ['help', '?'];
   dmCalls = [];
+  arguments = {};
 
-  constructor(sentAsDm?: boolean) {
-    this.sentAsDm = !!sentAsDm;
+  constructor(respondAsDm?: boolean) {
+    this.respondAsDm = !!respondAsDm;
   }
 
-  exec(message: Message, commandArguments: string): void {
-    let argsArray: string[] = [];
-    if (commandArguments.length !== 0) {
-      argsArray = commandArguments.split(' ');
-    }
+  exec(message: Message, _commandArguments: string, argsArray: string[]): void {
     try {
       if (argsArray.length === 0) {
-        if (!this.sentAsDm) {
-          message.channel.send("I have DM'd the help documents to you");
-        }
+        message.channel.send("I have DM'd the help documents to you");
         this.display(message, 1, null);
       } else {
         message.channel.send(Responses.getResponse(Responses.TOO_MANY_PARAMS));

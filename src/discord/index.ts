@@ -44,7 +44,7 @@ export class DiscordClient {
   private listen() {
     this.client.on('ready', () => {
       log('I am ready!');
-      this.registerCommands([Help, Hi]);
+      this.registerCommands([[Help], [Hi]]);
       this.createHelp();
     });
 
@@ -93,17 +93,21 @@ export class DiscordClient {
     });
   }
 
-  public registerCommands(commands: NewCommand[]): void {
-    commands.forEach(this.registerCommand.bind(this));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public registerCommands(commandSets: [command: NewCommand, ...args: any[]][]): void {
+    commandSets.forEach((commandSet) => {
+      this.registerCommand(commandSet[0], commandSet.slice(1));
+    });
   }
 
-  public registerCommand(command: NewCommand): void {
-    const commandInstance = new command();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public registerCommand(command: NewCommand, ...constructorArgs: any[]): void {
+    const commandInstance = new command(constructorArgs);
     commandInstance.calls.forEach((call) => {
       this.commandsMap.set(call, commandInstance);
     });
     if (commandInstance.sendDm) {
-      const dmCommandInstance = new command();
+      const dmCommandInstance = new command(true, constructorArgs);
       dmCommandInstance.dmCalls.forEach((call) => {
         this.commandsMap.set(call, dmCommandInstance);
       });
@@ -132,30 +136,30 @@ export class DiscordClient {
       if (messageArray.length > 1) {
         commandArguments = messageArray.slice(1, messageArray.length).join(' ');
       }
-      return { command, commandArguments };
+      let argsArray: string[] = [];
+      if (commandArguments.length !== 0) {
+        argsArray = commandArguments.split(' ');
+      }
+      return { command, commandArguments, argsArray };
     }
-    return null;
+    throw new Error('Client is not a user');
   }
 
   private processNormal(message: Message): void {
-    const commandArguments = this.getCommandArguments(message);
-    if (commandArguments && this.commandsMap.has(commandArguments.command)) {
-      console.log(commandArguments.command + ' command requested');
-      this.commandsMap.get(commandArguments.command)?.exec(message, commandArguments.commandArguments);
+    const { command, commandArguments, argsArray } = this.getCommandArguments(message);
+    if (this.commandsMap.has(command)) {
+      console.log(command + ' command requested');
+      this.commandsMap.get(command)?.exec(message, commandArguments, argsArray);
     } else {
       message.channel.send(Responses.getResponse(Responses.NOT_A_COMMAND));
     }
   }
 
   private processDm(message: Message): void {
-    const commandArguments = this.getCommandArguments(message);
-    if (
-      commandArguments &&
-      this.commandsMap.has(commandArguments.command) &&
-      this.commandsMap.get(commandArguments.command)?.sendDm
-    ) {
-      console.log(commandArguments.command + ' command requested');
-      this.commandsMap.get(commandArguments.command)?.exec(message, commandArguments.commandArguments);
+    const { command, commandArguments, argsArray } = this.getCommandArguments(message);
+    if (this.commandsMap.has(command) && this.commandsMap.get(command)?.sendDm) {
+      console.log(command + ' command requested');
+      this.commandsMap.get(command)?.exec(message, commandArguments, argsArray);
     } else {
       message.channel.send(Responses.getResponse(Responses.NOT_A_COMMAND));
     }

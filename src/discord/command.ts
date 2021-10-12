@@ -19,13 +19,15 @@ import { Message } from 'discord.js';
 export interface Command {
   respondDm: boolean; // Should the bot respond to commands made in a DM
   sendDm: boolean; // Should the bot be able to respond with a DM
-  sentAsDm: boolean; // instance level setting when DM and non DM has slightly different behaviour
+  respondAsDm: boolean; // instance level flag to determine whether to respond with a DM
   calls: string[]; // array to store the commands
   dmCalls: string[]; // array to store the commands which would respond with a DM
+  arguments: Arguments;
 
-  exec(message: Message, commandArguments: string): void;
-  // checkAndMapAlias(command: string): void;
+  exec(message: Message, commandArguments: string, argsArray: string[]): void;
   help(): [string, string, string, string[]];
 }
 
-export type NewCommand = { new (...args: []): Command };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type NewCommand = { new (...args: any[]): Command };
+export type Arguments = Record<string, CallableFunction>;

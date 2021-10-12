@@ -16,6 +16,6 @@
 
 export { AppServer } from './server';
 export { DiscordClient, DiscordOptions } from './discord';
-export { Command, NewCommand } from './discord/command';
+export { Command, NewCommand, Arguments } from './discord/command';
 export { Responses } from './discord/responseDict';
 export { HelpSchema } from './discord/commands/help';
