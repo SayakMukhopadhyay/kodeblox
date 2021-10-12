@@ -17,7 +17,7 @@
 import { Message, MessageEmbed, MessageReaction } from 'discord.js';
 import { Responses } from '../responseDict';
 import { Command } from '../command';
-import { log } from '../../logging';
+import { LoggingClient } from '../../logging';
 
 export interface HelpSchema {
   command: string;
@@ -50,7 +50,7 @@ export class Help implements Command {
         message.channel.send(Responses.getResponse(Responses.TOO_MANY_PARAMS));
       }
     } catch (err) {
-      log(err);
+      LoggingClient.log(err);
     }
   }
 
@@ -106,14 +106,14 @@ export class Help implements Command {
         const returnMessage = await this.helpList(displayCommands, embed, message, page);
         this.helpEmoji(displayCommands, page, maxDisplayState, returnMessage as Message);
       } catch (err) {
-        log(err);
+        LoggingClient.log(err);
       }
     } else {
       try {
         const returnMessage = await this.helpDescription(this.helpArray[(page - 1) * 10 + item], embed, message, page);
         (returnMessage as Message).react('⬅');
       } catch (err) {
-        log(err);
+        LoggingClient.log(err);
       }
     }
   }

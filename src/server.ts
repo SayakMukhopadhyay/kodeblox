@@ -20,7 +20,7 @@ import morgan from 'morgan';
 import http from 'http';
 import { Server } from 'http';
 import { AddressInfo } from 'net';
-import { log } from './logging';
+import { LoggingClient } from './logging';
 import { DiscordClient, DiscordOptions } from './discord';
 
 export class AppServer {
@@ -62,7 +62,7 @@ export class AppServer {
     if (error.syscall !== 'listen') throw error;
     switch (error.code) {
       case 'EADDRINUSE':
-        console.error(`Port ${this.port} is already in use`);
+        LoggingClient.error(`Port ${this.port} is already in use`, null, 'console');
         process.exit(1);
         break;
       default:
@@ -73,7 +73,7 @@ export class AppServer {
   private onListening(): void {
     const address = this._server.address() as AddressInfo;
     if (address) {
-      log(`Listening on port ${address.port}`);
+      LoggingClient.log(`Listening on port ${address.port}`, null, 'console');
     }
   }
 }

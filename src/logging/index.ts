@@ -18,8 +18,8 @@ import { Logger } from './logger';
 import { Console } from './loggers/console';
 
 export class LoggingClient {
-  public static loggers: Logger[] = [];
   public static defaultLogger: Logger = new Console();
+  public static loggers: Logger[] = [LoggingClient.defaultLogger];
 
   public static registerLogger(logger: Logger, isDefault = false) {
     LoggingClient.loggers.push(logger);
@@ -41,7 +41,7 @@ export class LoggingClient {
     }
   }
 
-  public static error(data: Error, metadata?: unknown, loggerName?: string): void {
+  public static error(data: string | Error, metadata?: unknown, loggerName?: string): void {
     if (loggerName) {
       const logger = LoggingClient.loggers.find((logger) => logger.loggerName === loggerName);
       if (logger) {

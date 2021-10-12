@@ -26,7 +26,7 @@ export class Console implements Logger {
     }
   }
 
-  error(data: Error, metadata?: unknown): void {
+  error(data: string | Error, metadata?: unknown): void {
     console.error(data);
     if (metadata) {
       console.log(JSON.stringify(metadata));

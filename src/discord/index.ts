@@ -43,7 +43,7 @@ export class DiscordClient {
 
   private listen() {
     this.client.on('ready', () => {
-      LoggingClient.log('I am ready!');
+      LoggingClient.log('I am ready!', null, 'console');
       this.registerCommands([[Help], [Hi]]);
       this.createHelp();
     });
@@ -148,7 +148,7 @@ export class DiscordClient {
   private processNormal(message: Message): void {
     const { command, commandArguments, argsArray } = this.getCommandArguments(message);
     if (this.commandsMap.has(command)) {
-      console.log(command + ' command requested');
+      LoggingClient.log(`${command} command requested`, null, 'console');
       this.commandsMap.get(command)?.exec(message, commandArguments, argsArray);
     } else {
       message.channel.send(Responses.getResponse(Responses.NOT_A_COMMAND));
@@ -158,7 +158,7 @@ export class DiscordClient {
   private processDm(message: Message): void {
     const { command, commandArguments, argsArray } = this.getCommandArguments(message);
     if (this.commandsMap.has(command) && this.commandsMap.get(command)?.sendDm) {
-      console.log(command + ' command requested');
+      LoggingClient.log(`${command} command requested`, null, 'console');
       this.commandsMap.get(command)?.exec(message, commandArguments, argsArray);
     } else {
       message.channel.send(Responses.getResponse(Responses.NOT_A_COMMAND));
