@@ -15,7 +15,7 @@
  */
 
 import { Client, ClientOptions, DMChannel, Message, MessageReaction } from 'discord.js';
-import { log } from '../logging';
+import { LoggingClient } from '../logging';
 import { Command, NewCommand } from './command';
 import { Responses } from './responseDict';
 import { Help, HelpSchema } from './commands/help';
@@ -43,7 +43,7 @@ export class DiscordClient {
 
   private listen() {
     this.client.on('ready', () => {
-      log('I am ready!');
+      LoggingClient.log('I am ready!');
       this.registerCommands([[Help], [Hi]]);
       this.createHelp();
     });
@@ -60,7 +60,7 @@ export class DiscordClient {
           this.processNormal(message);
         } catch (err) {
           message.channel.send(Responses.getResponse(Responses.FAIL));
-          log(err);
+          LoggingClient.log(err);
         }
       }
     });
@@ -87,7 +87,7 @@ export class DiscordClient {
     });
 
     this.client.on('rateLimit', (rateLimitInfo) => {
-      log(new Error('Discord Rate Limit Hit'), {
+      LoggingClient.log(new Error('Discord Rate Limit Hit'), {
         metaData: rateLimitInfo
       });
     });

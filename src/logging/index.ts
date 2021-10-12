@@ -14,9 +14,43 @@
  * limitations under the License.
  */
 
-export function log(data: string | Error | unknown, metadata?: unknown): void {
-  console.log(data);
-  if (metadata) {
-    console.log(JSON.stringify(metadata));
+import { Logger } from './logger';
+import { Console } from './loggers/console';
+
+export class LoggingClient {
+  public static loggers: Logger[] = [];
+  public static defaultLogger: Logger = new Console();
+
+  public static registerLogger(logger: Logger, isDefault = false) {
+    LoggingClient.loggers.push(logger);
+    if (isDefault) {
+      LoggingClient.defaultLogger = logger;
+    }
+  }
+
+  public static log(data: string | Error | unknown, metadata?: unknown, loggerName?: string): void {
+    if (loggerName) {
+      const logger = LoggingClient.loggers.find((logger) => logger.loggerName === loggerName);
+      if (logger) {
+        logger.log(data, metadata);
+      } else {
+        throw new Error(`Logger with name ${loggerName} not found`);
+      }
+    } else {
+      LoggingClient.defaultLogger.log(data, metadata);
+    }
+  }
+
+  public static error(data: Error, metadata?: unknown, loggerName?: string): void {
+    if (loggerName) {
+      const logger = LoggingClient.loggers.find((logger) => logger.loggerName === loggerName);
+      if (logger) {
+        logger.error(data, metadata);
+      } else {
+        throw new Error(`Logger with name ${loggerName} not found`);
+      }
+    } else {
+      LoggingClient.defaultLogger.error(data, metadata);
+    }
   }
 }
