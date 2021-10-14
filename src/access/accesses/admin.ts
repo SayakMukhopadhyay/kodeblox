@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { IAccess } from '../Access';
+import { IAccess } from '../access';
 import { Guild, Permissions, User } from 'discord.js';
 import { GuildModel } from '../../db/schemas/guild';
 

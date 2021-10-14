@@ -15,12 +15,7 @@
  */
 
 import { Guild, User } from 'discord.js';
-
-export interface IAccess {
-  priority: number;
-
-  has(author: User, guild: Guild, perms: string[], allowAdmin: boolean): Promise<boolean>;
-}
+import { IAccess } from './access';
 
 export class Access {
   public static accessCheckers: IAccess[] = [];

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { IAccess } from '../Access';
+import { IAccess } from '../access';
 import { Guild, Permissions, User } from 'discord.js';
 import { GuildModel } from '../../db/schemas/guild';
 
-export const FORBIDDEN = 'forbidden';
+export const ALL = 'all';
 
-export class Forbidden implements IAccess {
-  public priority = 999;
+export class All implements IAccess {
+  public priority = 0;
 
   public async has(author: User, guild: Guild, perms: string[], allowAdmin = false): Promise<boolean> {
     const member = await guild.members.fetch(author);
@@ -29,17 +29,11 @@ export class Forbidden implements IAccess {
       return true;
     } else {
       const guildId = guild.id;
-      const roles = member.roles.cache;
       const dbGuild = await GuildModel.findOne({ guild_id: guildId });
       if (dbGuild) {
         for (const perm of perms) {
-          if (perm === FORBIDDEN) {
-            const forbiddenRoles = dbGuild.forbidden_roles_id;
-            for (const role of forbiddenRoles) {
-              if (roles.has(role)) {
-                throw new Error('Access Denied');
-              }
-            }
+          if (perm === ALL) {
+            return true;
           }
         }
       }
