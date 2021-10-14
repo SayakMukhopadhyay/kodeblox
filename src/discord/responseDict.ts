@@ -35,6 +35,8 @@ export class Responses {
     'Um...were you trying to give me a command? If so you may be using the wrong one'
   ];
   public static readonly INSUFFICIENT_PERMS = ["You don't have the permissions to make me do that"];
+  public static readonly ID_NOT_FOUND = ['The ID you entered does not exist'];
+  public static readonly GUILD_NOT_SETUP = ['Your guild has not been setup yet.'];
   public static readonly NOT_A_TEXT_CHANNEL = [
     'The entered channel is not a text channel. Please enter a text channel'
   ];

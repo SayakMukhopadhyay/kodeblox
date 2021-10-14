@@ -21,7 +21,7 @@ export class LoggingClient {
   public static defaultLogger: Logger = new Console();
   public static loggers: Logger[] = [LoggingClient.defaultLogger];
 
-  public static registerLogger(logger: Logger, isDefault = false) {
+  public static registerLogger(logger: Logger, isDefault = false): void {
     LoggingClient.loggers.push(logger);
     if (isDefault) {
       LoggingClient.defaultLogger = logger;
@@ -41,7 +41,7 @@ export class LoggingClient {
     }
   }
 
-  public static error(data: string | Error, metadata?: unknown, loggerName?: string): void {
+  public static error(data: string | Error | unknown, metadata?: unknown, loggerName?: string): void {
     if (loggerName) {
       const logger = LoggingClient.loggers.find((logger) => logger.loggerName === loggerName);
       if (logger) {

@@ -29,16 +29,18 @@ export type DiscordOptions = {
 export class DiscordClient {
   public client: Client;
   public commandsMap: Map<string, Command>;
+  private readonly token;
 
   constructor(options: DiscordOptions) {
     this.client = new Client(options.client);
     this.commandsMap = new Map();
-    this.login(options.token);
-    this.listen();
+    this.token = options.token;
   }
 
-  private login(token: string) {
-    this.client.login(token);
+  public async login(): Promise<string> {
+    const discordLogin = await this.client.login(this.token);
+    this.listen();
+    return discordLogin;
   }
 
   private listen() {

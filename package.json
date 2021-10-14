@@ -63,6 +63,7 @@
     "@bugsnag/js": "^7.11.0",
     "@bugsnag/plugin-express": "^7.11.0",
     "discord.js": "^13.1.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^6.0.10"
   }
 }

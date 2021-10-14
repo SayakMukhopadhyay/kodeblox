@@ -19,5 +19,5 @@ export interface Logger {
 
   log(data: string | Error | unknown, metadata?: unknown): void;
 
-  error(data: string | Error, metadata?: unknown): void;
+  error(data: string | Error | unknown, metadata?: unknown): void;
 }

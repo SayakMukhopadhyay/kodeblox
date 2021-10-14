@@ -22,6 +22,16 @@ import { Server } from 'http';
 import { AddressInfo } from 'net';
 import { LoggingClient } from './logging';
 import { DiscordClient, DiscordOptions } from './discord';
+import { Db, DbOptions } from './db';
+
+export type Options = {
+  port?: number;
+  preMiddlewareHook?: () => void;
+  postMiddlewareHook?: () => void;
+  discord: DiscordOptions;
+  db: DbOptions;
+  disableRouteLogs?: boolean;
+};
 
 export class AppServer {
   get server(): Server {
@@ -30,6 +40,7 @@ export class AppServer {
   public express: Application;
   public port: number;
   public discordClient: DiscordClient;
+  public db: Db;
   private readonly _server: Server;
 
   constructor(options: Options) {
@@ -44,6 +55,10 @@ export class AppServer {
       options.postMiddlewareHook();
     }
     this.discordClient = new DiscordClient(options.discord);
+    this.discordClient.login();
+
+    this.db = new Db(options.db);
+    this.db.connectToDB();
 
     this.express.set('port', this.port);
     this._server = http.createServer(this.express);
@@ -77,11 +92,3 @@ export class AppServer {
     }
   }
 }
-
-export type Options = {
-  port?: number;
-  preMiddlewareHook?: () => void;
-  postMiddlewareHook?: () => void;
-  discord: DiscordOptions;
-  disableRouteLogs?: boolean;
-};

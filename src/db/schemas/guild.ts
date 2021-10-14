@@ -14,22 +14,33 @@
  * limitations under the License.
  */
 
-import { Logger } from '../logger';
+import { Document, model, Schema } from 'mongoose';
 
-export class Console implements Logger {
-  public loggerName = 'console';
-
-  log(data: string | Error | unknown, metadata?: unknown): void {
-    console.log(data);
-    if (metadata) {
-      console.log(JSON.stringify(metadata));
-    }
-  }
-
-  error(data: string | Error | unknown, metadata?: unknown): void {
-    console.error(data);
-    if (metadata) {
-      console.log(JSON.stringify(metadata));
-    }
-  }
+export interface Guild {
+  guild_id: string;
+  admin_roles_id: string[];
+  forbidden_roles_id: string[];
+  created_at: Date;
+  updated_at: Date;
 }
+
+export interface IGuildSchema extends Document, Guild {}
+
+export const GuildSchema = new Schema<IGuildSchema>(
+  {
+    guild_id: {
+      type: String,
+      unique: true
+    },
+    admin_roles_id: [String],
+    forbidden_roles_id: [String]
+  },
+  {
+    timestamps: {
+      createdAt: 'created_at',
+      updatedAt: 'updated_at'
+    }
+  }
+);
+
+export const GuildModel = model('Guild', GuildSchema, 'guilds');
