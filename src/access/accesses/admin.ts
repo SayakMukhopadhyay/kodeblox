@@ -44,6 +44,6 @@ export class Admin implements IAccess {
         }
       }
     }
-    throw new Error('Access Denied');
+    return false;
   }
 }

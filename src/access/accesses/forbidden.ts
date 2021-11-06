@@ -37,13 +37,13 @@ export class Forbidden implements IAccess {
             const forbiddenRoles = dbGuild.forbidden_roles_id;
             for (const role of forbiddenRoles) {
               if (roles.has(role)) {
-                throw new Error('Access Denied');
+                return false;
               }
             }
           }
         }
       }
     }
-    throw new Error('Access Denied');
+    return false;
   }
 }

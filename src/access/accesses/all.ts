@@ -38,6 +38,6 @@ export class All implements IAccess {
         }
       }
     }
-    throw new Error('Access Denied');
+    return false;
   }
 }

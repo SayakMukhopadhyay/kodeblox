@@ -25,26 +25,14 @@ export class Access {
     Access.accessCheckers.sort((a, b) => a.priority - b.priority);
   }
 
-  public static async has(author: User, guild: Guild | null, perms: string[], allowAdmin: boolean): Promise<boolean> {
+  public static async has(author: User, guild: Guild | null, perms: string[], allowAdmin = false): Promise<boolean> {
     let accessGranted = false;
     if (!guild) {
-      throw new Error('Access Denied');
+      return false;
     }
     for (const accessChecker of this.accessCheckers) {
-      try {
-        accessGranted = await accessChecker.has(author, guild, perms, allowAdmin);
-      } catch (err) {
-        if (err === 'Access Denied') {
-          accessGranted = false;
-        } else {
-          throw err;
-        }
-      }
+      accessGranted = await accessChecker.has(author, guild, perms, allowAdmin);
     }
-    if (accessGranted) {
-      return true;
-    } else {
-      throw new Error('Access Denied');
-    }
+    return accessGranted;
   }
 }
