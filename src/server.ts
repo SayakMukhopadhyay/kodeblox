@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-import { Application } from 'express';
-import express from 'express';
+import express, { Application } from 'express';
 import morgan from 'morgan';
-import http from 'http';
-import { Server } from 'http';
+import http, { Server } from 'http';
 import { AddressInfo } from 'net';
 import { LoggingClient } from './logging';
 import { DiscordClient, DiscordOptions } from './discord';
 import { Db, DbOptions } from './db';
+import { Scheduler, SchedulerOptions } from './scheduler';
 
 export type Options = {
   port?: number;
@@ -30,6 +29,7 @@ export type Options = {
   postMiddlewareHook?: () => void;
   discord: DiscordOptions;
   db: DbOptions;
+  scheduler?: SchedulerOptions[];
   disableRouteLogs?: boolean;
 };
 
@@ -41,6 +41,7 @@ export class AppServer {
   public port: number;
   public discordClient: DiscordClient;
   public db: Db;
+  public scheduler: Scheduler[] | undefined;
   private readonly _server: Server;
 
   constructor(options: Options) {
@@ -58,13 +59,30 @@ export class AppServer {
     this.discordClient.login();
 
     this.db = new Db(options.db);
-    this.db.connectToDB();
+    this.runAsync(options);
 
     this.express.set('port', this.port);
     this._server = http.createServer(this.express);
     this._server.listen(this.port);
     this._server.on('error', this.onError.bind(this));
     this._server.on('listening', this.onListening.bind(this));
+  }
+
+  private async runAsync(options: Options) {
+    const connection = await this.db.connectToDB();
+    if (options.scheduler && options.scheduler.length > 0) {
+      this.scheduler = [];
+      for (const schedulerOption of options.scheduler) {
+        this.scheduler.push(
+          new Scheduler(
+            connection.connection,
+            schedulerOption.collectionName,
+            schedulerOption.scheduleName,
+            schedulerOption.callback
+          )
+        );
+      }
+    }
   }
 
   private middleware(options: Options): void {
