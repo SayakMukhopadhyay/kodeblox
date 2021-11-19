@@ -22,6 +22,11 @@ import { LoggingClient } from './logging';
 import { DiscordClient, DiscordOptions } from './discord';
 import { Db, DbOptions } from './db';
 import { Scheduler, SchedulerOptions } from './scheduler';
+import { Access } from './access';
+import { All } from './access/accesses/all';
+import { Admin } from './access/accesses/admin';
+import { Forbidden } from './access/accesses/forbidden';
+import { Noop } from './access/accesses/noop';
 
 export type Options = {
   port?: number;
@@ -31,6 +36,7 @@ export type Options = {
   db: DbOptions;
   scheduler?: SchedulerOptions[];
   disableRouteLogs?: boolean;
+  disableNoopAccess?: boolean;
 };
 
 export class AppServer {
@@ -61,11 +67,22 @@ export class AppServer {
     this.db = new Db(options.db);
     this.runAsync(options);
 
+    this.setupDefaultAccess(options);
+
     this.express.set('port', this.port);
     this._server = http.createServer(this.express);
     this._server.listen(this.port);
     this._server.on('error', this.onError.bind(this));
     this._server.on('listening', this.onListening.bind(this));
+  }
+
+  private setupDefaultAccess(options: Options): void {
+    Access.registerAccessChecker(new All());
+    Access.registerAccessChecker(new Admin());
+    Access.registerAccessChecker(new Forbidden());
+    if (options.disableNoopAccess) {
+      Access.registerAccessChecker(new Noop());
+    }
   }
 
   private async runAsync(options: Options) {
@@ -86,7 +103,7 @@ export class AppServer {
   }
 
   private middleware(options: Options): void {
-    if (!options?.disableRouteLogs) {
+    if (!options.disableRouteLogs) {
       this.express.use(morgan('dev'));
     }
   }

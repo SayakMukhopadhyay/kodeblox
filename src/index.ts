@@ -27,4 +27,7 @@ export { Forbidden, FORBIDDEN } from './access/accesses/forbidden';
 export { DbOptions, Db } from './db';
 export { Guild, IGuildSchema, GuildSchema, GuildModel } from './db/schemas/guild';
 export { LoggingClient } from './logging';
+export { Scheduler, SchedulerOptions } from './scheduler';
+export { GuildNotSetupException } from './discord/errors';
+
 export { BugsnagOptions, Bugsnag } from './logging/loggers/bugsnag';

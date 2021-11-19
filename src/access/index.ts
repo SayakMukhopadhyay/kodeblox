@@ -30,6 +30,7 @@ export class Access {
     if (!guild) {
       return false;
     }
+
     for (const accessChecker of this.accessCheckers) {
       accessGranted = await accessChecker.has(author, guild, perms, allowAdmin);
     }

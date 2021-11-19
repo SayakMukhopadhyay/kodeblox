@@ -20,6 +20,7 @@ import { Command, NewCommand } from './command';
 import { Responses } from './responseDict';
 import { Help, HelpSchema } from './commands/help';
 import { Hi } from './commands/hi';
+import { MyGuild } from './commands/myGuild';
 
 export type DiscordOptions = {
   token: string;
@@ -46,7 +47,7 @@ export class DiscordClient {
   private listen() {
     this.client.on('ready', () => {
       LoggingClient.log('I am ready!', null, 'console');
-      this.registerCommands([[Help], [Hi]]);
+      this.registerCommands([[Help], [Hi], [MyGuild]]);
       this.createHelp();
     });
 
