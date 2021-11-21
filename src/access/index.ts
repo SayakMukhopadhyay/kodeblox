@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import { Guild, User } from 'discord.js';
+import { Guild, Permissions, User } from 'discord.js';
 import { IAccess } from './access';
 
 export class Access {
   public static accessCheckers: IAccess[] = [];
+  public static noopCheck = true;
 
   public static registerAccessChecker(accessChecker: IAccess): void {
     Access.accessCheckers.push(accessChecker);
@@ -29,6 +30,13 @@ export class Access {
     let accessGranted = false;
     if (!guild) {
       return false;
+    }
+
+    if (perms.length === 0 && this.noopCheck) {
+      const member = await guild.members.fetch(author);
+      if (allowAdmin && member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
+        return true;
+      }
     }
 
     for (const accessChecker of this.accessCheckers) {

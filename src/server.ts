@@ -26,7 +26,6 @@ import { Access } from './access';
 import { All } from './access/accesses/all';
 import { Admin } from './access/accesses/admin';
 import { Forbidden } from './access/accesses/forbidden';
-import { Noop } from './access/accesses/noop';
 
 export type Options = {
   port?: number;
@@ -81,7 +80,7 @@ export class AppServer {
     Access.registerAccessChecker(new Admin());
     Access.registerAccessChecker(new Forbidden());
     if (options.disableNoopAccess) {
-      Access.registerAccessChecker(new Noop());
+      Access.noopCheck = false;
     }
   }
 
