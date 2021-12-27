@@ -87,8 +87,7 @@ jobs:
         run: |
           echo "BEEZ_PACKAGE_FILE=$(sed -e 's/^"//' -e 's/"$//' <<< $(jq .version package.json))" >> $GITHUB_ENV
           echo "BEEZ_PACKAGE_LOCK_FILE=$(sed -e 's/^"//' -e 's/"$//' <<< $(jq .version package-lock.json))" >> $GITHUB_ENV
-          echo "BEEZ_PACKAGE_LOCK_FILE_2=$(sed -e 's/^"//' -e 's/"$//' <<< $(jq .version package-lock.json))" >> $GITHUB_ENV
 
       - name: Verify version strings
         run: |
-          [[ "$BEEZ_PACKAGE_FILE" == "$BEEZ_PACKAGE_LOCK_FILE" && "$BEEZ_PACKAGE_LOCK_FILE" == "$BEEZ_PACKAGE_LOCK_FILE_2" ]]
+          [[ "$BEEZ_PACKAGE_FILE" == "$BEEZ_PACKAGE_LOCK_FILE" ]]
