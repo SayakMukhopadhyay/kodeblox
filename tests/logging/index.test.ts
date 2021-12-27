@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { log } from '../../src/logging';
+import { LoggingClient } from '../../src';
 
 describe('server', () => {
   it('works', async () => {
-    log('test');
+    LoggingClient.log('test');
   });
 });

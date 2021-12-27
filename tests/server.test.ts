@@ -24,6 +24,11 @@ describe('server', () => {
       client: {
         intents: ['GUILD_MEMBERS']
       }
+    },
+    db: {
+      username: 'foo',
+      password: 'bar',
+      host: 'mongodb://localhost:27017/bot'
     }
   };
 
