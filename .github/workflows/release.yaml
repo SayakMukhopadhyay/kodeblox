@@ -27,7 +27,7 @@ jobs:
 
       - name: Set Version ENV
         run: |
-          echo "VERSION=$(sed -e 's/^"//' -e 's/"$//' <<< $(jq .version package.json))" >> $GITHUB_ENV
+          echo "VERSION=v$(sed -e 's/^"//' -e 's/"$//' <<< $(jq .version package.json))" >> $GITHUB_ENV
 
       - name: Create Release
         uses: actions/create-release@v1
