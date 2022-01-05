@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import express, { Application } from 'express';
+import express, { Application, Router } from 'express';
 import morgan from 'morgan';
 import http, { Server } from 'http';
 import { AddressInfo } from 'net';
@@ -73,6 +73,11 @@ export class AppServer {
     this._server.listen(this.port);
     this._server.on('error', this.onError.bind(this));
     this._server.on('listening', this.onListening.bind(this));
+  }
+
+  // Register a router for the webserver at the given path.
+  public registerRouter(path: string, router: Router): void {
+    this.express.use(path, router);
   }
 
   private setupDefaultAccess(options: Options): void {
