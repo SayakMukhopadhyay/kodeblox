@@ -40,7 +40,7 @@ export class Access {
     }
 
     for (const accessChecker of this.accessCheckers) {
-      accessGranted = await accessChecker.has(author, guild, perms, allowAdmin);
+      accessGranted = await accessChecker.has(author, guild, perms, accessGranted, allowAdmin);
     }
     return accessGranted;
   }

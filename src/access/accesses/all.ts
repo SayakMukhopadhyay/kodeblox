@@ -23,7 +23,13 @@ export const ALL = 'all';
 export class All implements IAccess {
   public priority = 0;
 
-  public async has(author: User, guild: Guild, perms: string[], allowAdmin = false): Promise<boolean> {
+  public async has(
+    author: User,
+    guild: Guild,
+    perms: string[],
+    current: boolean,
+    allowAdmin = false
+  ): Promise<boolean> {
     const member = await guild.members.fetch(author);
     if (allowAdmin && member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
       return true;
@@ -38,6 +44,6 @@ export class All implements IAccess {
         }
       }
     }
-    return false;
+    return current;
   }
 }

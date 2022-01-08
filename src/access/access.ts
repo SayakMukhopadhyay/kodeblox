@@ -19,5 +19,5 @@ import { Guild, User } from 'discord.js';
 export interface IAccess {
   priority: number;
 
-  has(author: User, guild: Guild, perms: string[], allowAdmin?: boolean): Promise<boolean>;
+  has(author: User, guild: Guild, perms: string[], current: boolean, allowAdmin?: boolean): Promise<boolean>;
 }

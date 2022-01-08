@@ -23,7 +23,13 @@ export const FORBIDDEN = 'forbidden';
 export class Forbidden implements IAccess {
   public priority = 999;
 
-  public async has(author: User, guild: Guild, perms: string[], allowAdmin = false): Promise<boolean> {
+  public async has(
+    author: User,
+    guild: Guild,
+    perms: string[],
+    current: boolean,
+    allowAdmin = false
+  ): Promise<boolean> {
     const member = await guild.members.fetch(author);
     if (allowAdmin && member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
       return true;
@@ -44,6 +50,6 @@ export class Forbidden implements IAccess {
         }
       }
     }
-    return false;
+    return current;
   }
 }
